@@ -1,0 +1,66 @@
+{
+  "name": "n8n-nodes-vaelis",
+  "version": "0.1.0",
+  "description": "The enterprise Jev & System 1 Gateway for n8n: sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and deterministic fast-path powered by Vaelis.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "jev",
+    "typesafe",
+    "typesafe-ai",
+    "system1",
+    "classification",
+    "routing",
+    "guardrails",
+    "agent-security",
+    "fast-path",
+    "vaelis",
+    "llm-cost-reduction",
+    "ai-agent-tool"
+  ],
+  "author": {
+    "name": "CubicMaldo"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CubicMaldo/n8n-nodes-vaelis.git"
+  },
+  "homepage": "https://github.com/CubicMaldo/n8n-nodes-vaelis#readme",
+  "bugs": {
+    "url": "https://github.com/CubicMaldo/n8n-nodes-vaelis/issues"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && gulp copy:icons",
+    "dev": "tsc --watch",
+    "lint": "eslint nodes credentials --ext .ts",
+    "lintfix": "eslint nodes credentials --ext .ts --fix",
+    "test": "node --test test/**/*.test.js test/**/*.test.ts || node --test test/*.test.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/VaelisApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Vaelis/Vaelis.node.js"
+    ]
+  },
+  "dependencies": {
+    "@cubicmaldo/vaelis": "^0.1.0 || ^1.0.0"
+  },
+  "devDependencies": {
+    "@types/gulp": "^4.0.17",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "gulp": "^5.0.0",
+    "n8n-workflow": "^1.0.0 || ^2.0.0",
+    "typescript": "^5.0.0"
+  }
+}

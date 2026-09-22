@@ -1,0 +1,126 @@
+{
+  "name": "Jev Gateway - Three-Tier Support Ticket Triage",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "incoming-ticket",
+        "responseMode": "onReceived"
+      },
+      "id": "1",
+      "name": "Webhook Incoming Ticket",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "evaluateState",
+        "stateSource": "inputItem",
+        "questionMode": "structured",
+        "rules": {
+          "rule": [
+            {
+              "id": "department",
+              "kind": "choice",
+              "question": "Which team should handle this ticket?",
+              "options": "billing, technical, sales, cancellations",
+              "minConfidence": 0.88
+            },
+            {
+              "id": "is_urgent",
+              "kind": "noul",
+              "question": "Is the user reporting an active service disruption or outage?",
+              "minConfidence": 0.90
+            }
+          ]
+        },
+        "highThreshold": 0.9,
+        "ambiguityThreshold": 0.65,
+        "options": {
+          "includeInputFields": true,
+          "outputField": "vaelis"
+        }
+      },
+      "id": "2",
+      "name": "Jev 3-Tier Router",
+      "type": "n8n-nodes-vaelis.vaelis",
+      "typeVersion": 1,
+      "position": [480, 300],
+      "credentials": {
+        "vaelisApi": {
+          "id": "vaelis_creds",
+          "name": "TypeSafe Jev API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Output 0: Direct Resolution (High Confidence >= 90%)\nAuto-assigns to team in Zendesk/Linear with 0 LLM tokens consumed."
+      },
+      "id": "3",
+      "name": "Port 0 - Automated Action",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [740, 180]
+    },
+    {
+      "parameters": {
+        "content": "## Output 1: System 2 Ambiguity (65% - 89%)\nAmbiguous ticket that overlaps multiple departments. Escalates to LLM agent for drafting reply."
+      },
+      "id": "4",
+      "name": "Port 1 - LLM Semantic Reasoning",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [740, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Output 2: Human in the Loop (<65%)\nUnclear inquiry or high-frustration edge case. Escalates to Senior Support Lead in Slack."
+      },
+      "id": "5",
+      "name": "Port 2 - Human Review Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [740, 420]
+    }
+  ],
+  "connections": {
+    "Webhook Incoming Ticket": {
+      "main": [
+        [
+          {
+            "node": "Jev 3-Tier Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jev 3-Tier Router": {
+      "main": [
+        [
+          {
+            "node": "Port 0 - Automated Action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Port 1 - LLM Semantic Reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Port 2 - Human Review Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

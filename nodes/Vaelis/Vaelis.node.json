@@ -1,0 +1,17 @@
+{
+  "node": "n8n-nodes-vaelis.vaelis",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "AI",
+    "Security",
+    "Development"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://github.com/CubicMaldo/vaelis"
+      }
+    ]
+  }
+}

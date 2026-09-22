@@ -1,0 +1,157 @@
+{
+  "name": "Jev Gateway - AI Agent Tool Call Guardrail",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "tool_command",
+              "value": "rm -rf /tmp/cache && DROP TABLE temporary_sessions;"
+            },
+            {
+              "name": "context_prompt",
+              "value": "Agent cleaning up expired user session cache"
+            },
+            {
+              "name": "agent_role",
+              "value": "autonomous_agent"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "is_production",
+              "value": true
+            }
+          ]
+        }
+      },
+      "id": "2",
+      "name": "Incoming Agent Action Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "operation": "interceptToolCall",
+        "command": "={{ $json.tool_command }}",
+        "context": "={{ $json.context_prompt }}",
+        "isProduction": "={{ $json.is_production }}",
+        "role": "={{ $json.agent_role }}",
+        "highThreshold": 0.9,
+        "ambiguityThreshold": 0.65,
+        "options": {
+          "includeInputFields": true,
+          "outputField": "vaelis"
+        }
+      },
+      "id": "3",
+      "name": "Jev Fast-Path Gateway",
+      "type": "n8n-nodes-vaelis.vaelis",
+      "typeVersion": 1,
+      "position": [660, 300],
+      "credentials": {
+        "vaelisApi": {
+          "id": "vaelis_creds",
+          "name": "TypeSafe Jev API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Output 0: High Confidence (0 LLM Tokens)\nExecutes deterministic bash/DB command safely in <80 ms."
+      },
+      "id": "4",
+      "name": "Port 0 - Deterministic Execution",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [940, 180]
+    },
+    {
+      "parameters": {
+        "content": "## Output 1: System 2 Ambiguity\nAwakens heavy reasoning model (Claude 3.5 / GPT-4o / Gemini Flash) for deep context verification."
+      },
+      "id": "5",
+      "name": "Port 1 - Deep Semantic LLM Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [940, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Output 2: HITL Escalation / Security Block\nLethal command blocked in <1 ms. Escalated to Security Audit / Slack alert."
+      },
+      "id": "6",
+      "name": "Port 2 - Security Block & HITL Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [940, 420]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Incoming Agent Action Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Incoming Agent Action Payload": {
+      "main": [
+        [
+          {
+            "node": "Jev Fast-Path Gateway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jev Fast-Path Gateway": {
+      "main": [
+        [
+          {
+            "node": "Port 0 - Deterministic Execution",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Port 1 - Deep Semantic LLM Review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Port 2 - Security Block & HITL Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
