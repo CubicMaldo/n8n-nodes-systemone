@@ -1,9 +1,10 @@
 # System 1 Gateway for n8n (TypeSafe Jev)
 
+[![CI](https://github.com/CubicMaldo/n8n-nodes-systemone/actions/workflows/ci.yml/badge.svg)](https://github.com/CubicMaldo/n8n-nodes-systemone/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-systemone.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/n8n-nodes-systemone)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat-square)](LICENSE)
 [![Tests Passing](https://img.shields.io/badge/tests-19%2F19%20passed-brightgreen.svg?style=flat-square)](#testing--verification)
-[![TypeScript 5.x](https://img.shields.io/badge/TypeScript-5.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
+[![TypeScript 6.x](https://img.shields.io/badge/TypeScript-6.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![n8n Community Node](https://img.shields.io/badge/n8n-community--node-EA4B71.svg?style=flat-square)](https://docs.n8n.io/integrations/community-nodes/)
 
 > **The Enterprise-Grade System 1 Gateway for TypeSafe Jev & Cognitive AI in n8n workflows.**  
@@ -109,8 +110,7 @@ npm link n8n-nodes-systemone
    - **API Key**: Primary API key for the chosen provider.
    - **Custom Endpoint**: `https://api.typesafe.ai` (or your edge proxy/local LLM host).
    - **Fallback Strategy**:
-     - **Google Gemini Flash**: Zero-friction cloud fallback with calibrated structured outputs.
-     - **Universal LLM Fallback**: Resilient fallback to Groq, OpenAI, Anthropic, DeepSeek, OpenRouter, or Ollama if TypeSafe Cloud experiences rate limits (429) or network hiccups.
+     - **Universal LLM Fallback** (default): Resilient fallback to any supported LLM provider (Gemini Flash, Groq, OpenAI, Anthropic, DeepSeek, Mistral, OpenRouter, or Ollama) if the primary engine experiences rate limits (429) or network errors.
      - **Deterministic Heuristics**: Offline heuristics running in 0 ms with 0 token spend.
 
 ---

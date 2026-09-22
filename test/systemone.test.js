@@ -60,11 +60,23 @@ describe('System 1 Gateway (Jev & TypeSafe) n8n Community Package', () => {
       assert.ok(propNames.includes('apiKey'));
       assert.ok(propNames.includes('endpoint'));
       assert.ok(propNames.includes('fallbackStrategy'));
-      assert.ok(propNames.includes('geminiApiKey'));
       assert.ok(propNames.includes('fallbackProvider'));
       assert.ok(propNames.includes('fallbackApiKey'));
       assert.ok(propNames.includes('fallbackModel'));
       assert.ok(propNames.includes('fallbackBaseUrl'));
+
+      // Verify geminiApiKey is NOT present (unified fallback)
+      assert.ok(!propNames.includes('geminiApiKey'), 'geminiApiKey should not exist in unified fallback');
+
+      // Verify fallbackStrategy options are 'llm' and 'deterministic' only
+      const fallbackStrategyProp = creds.properties.find((p) => p.name === 'fallbackStrategy');
+      const strategyValues = fallbackStrategyProp.options.map((o) => o.value);
+      assert.deepStrictEqual(strategyValues, ['llm', 'deterministic']);
+
+      // Verify Gemini is available as a fallback provider
+      const fallbackProviderProp = creds.properties.find((p) => p.name === 'fallbackProvider');
+      const providerValues = fallbackProviderProp.options.map((o) => o.value);
+      assert.ok(providerValues.includes('gemini'), 'Gemini should be a universal fallback provider');
 
       // Verificar alias VaelisApi
       const vaelisCreds = new VaelisApi();

@@ -9,17 +9,17 @@ export const evaluateStateDescription: INodeProperties[] = [
       {
         name: 'Text or Expression',
         value: 'text',
-        description: 'Evalúa un texto sin formato o una expresión de n8n',
+        description: 'Evaluate plain text or an n8n expression',
       },
       {
         name: 'Whole Input Item',
         value: 'inputItem',
-        description: 'Usa el objeto JSON completo del ítem entrante como estado',
+        description: 'Use the complete JSON object from the incoming item as state',
       },
       {
         name: 'Custom JSON',
         value: 'json',
-        description: 'Provee un objeto o array JSON estructurado',
+        description: 'Provide a structured JSON object or array',
       },
     ],
     default: 'text',
@@ -28,7 +28,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         operation: ['evaluateState'],
       },
     },
-    description: 'Origen de los datos de estado para alimentar la evaluación System 1',
+    description: 'Source of state data to feed into the System 1 evaluation',
   },
   {
     displayName: 'State Text',
@@ -38,14 +38,14 @@ export const evaluateStateDescription: INodeProperties[] = [
       rows: 4,
     },
     default: '',
-    placeholder: 'e.g. Por favor cancelar mi suscripción inmediatamente debido a fallos recurrentes.',
+    placeholder: 'e.g. Please cancel my subscription immediately due to recurring failures.',
     displayOptions: {
       show: {
         operation: ['evaluateState'],
         stateSource: ['text'],
       },
     },
-    description: 'Texto o contexto no estructurado a evaluar',
+    description: 'Unstructured text or context to evaluate',
   },
   {
     displayName: 'State (JSON)',
@@ -61,7 +61,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         stateSource: ['json'],
       },
     },
-    description: 'Objeto o array JSON a evaluar',
+    description: 'JSON object or array to evaluate',
   },
   {
     displayName: 'Question Mode',
@@ -71,12 +71,12 @@ export const evaluateStateDescription: INodeProperties[] = [
       {
         name: 'Structured (Visual)',
         value: 'structured',
-        description: 'Configura preguntas interactivamente usando la interfaz de n8n',
+        description: 'Configure questions interactively using the n8n interface',
       },
       {
         name: 'Using JSON',
         value: 'json',
-        description: 'Provee un diccionario de preguntas directamente en formato TypeSafe/Vaelis',
+        description: 'Provide a questions dictionary directly in TypeSafe/Vaelis format',
       },
     ],
     default: 'structured',
@@ -85,7 +85,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         operation: ['evaluateState'],
       },
     },
-    description: 'Modo de definición de las preguntas de decisión',
+    description: 'How to define the decision questions',
   },
   {
     displayName: 'Questions (JSON)',
@@ -101,7 +101,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         questionMode: ['json'],
       },
     },
-    description: 'Diccionario de preguntas en formato oficial TypeSafe System 1',
+    description: 'Questions dictionary in official TypeSafe System 1 format',
   },
   {
     displayName: 'Decision Rules',
@@ -110,7 +110,7 @@ export const evaluateStateDescription: INodeProperties[] = [
     typeOptions: {
       multipleValues: true,
     },
-    placeholder: 'Agregar Regla de Decisión',
+    placeholder: 'Add Decision Rule',
     default: {
       rule: [
         {
@@ -138,7 +138,7 @@ export const evaluateStateDescription: INodeProperties[] = [
             type: 'string',
             required: true,
             default: 'rule_1',
-            description: 'Identificador único de la regla (ej. department, is_urgent, risk_score)',
+            description: 'Unique rule identifier (e.g. department, is_urgent, risk_score)',
           },
           {
             displayName: 'Decision Kind',
@@ -148,21 +148,21 @@ export const evaluateStateDescription: INodeProperties[] = [
               {
                 name: 'Noul (Boolean Probability)',
                 value: 'noul',
-                description: 'Decisión binaria con probabilidad calibrada 0.0 - 1.0',
+                description: 'Binary decision with calibrated probability 0.0 - 1.0',
               },
               {
                 name: 'Choice (Categorical)',
                 value: 'choice',
-                description: 'Selección de una categoría entre varias opciones',
+                description: 'Select one category from multiple options',
               },
               {
                 name: 'Score (Continuous 0.0 - 1.0)',
                 value: 'score',
-                description: 'Calificación cuantitativa continua entre 0.0 y 1.0',
+                description: 'Continuous quantitative score between 0.0 and 1.0',
               },
             ],
             default: 'noul',
-            description: 'Tipo de salida probabilística requerida',
+            description: 'Required probabilistic output type',
           },
           {
             displayName: 'Question / Criteria',
@@ -171,7 +171,7 @@ export const evaluateStateDescription: INodeProperties[] = [
             required: true,
             default: '',
             placeholder: 'e.g. Does this request involve financial transactions or refunds?',
-            description: 'Criterio en lenguaje natural para la evaluación determinista',
+            description: 'Natural language criteria for the deterministic evaluation',
           },
           {
             displayName: 'Options (Comma-separated)',
@@ -183,7 +183,7 @@ export const evaluateStateDescription: INodeProperties[] = [
                 kind: ['choice'],
               },
             },
-            description: 'Opciones categóricas separadas por comas',
+            description: 'Comma-separated categorical options',
           },
           {
             displayName: 'Min Confidence',
@@ -195,14 +195,14 @@ export const evaluateStateDescription: INodeProperties[] = [
               numberPrecision: 2,
             },
             default: 0.90,
-            description: 'Confianza matemática mínima para aceptar la decisión de esta regla',
+            description: 'Minimum mathematical confidence to accept this rule\'s decision',
           },
           {
             displayName: 'Description',
             name: 'description',
             type: 'string',
             default: '',
-            description: 'Descripción interna o metadatos de auditoría',
+            description: 'Internal description or audit metadata',
           },
         ],
       },
@@ -223,7 +223,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         operation: ['evaluateState'],
       },
     },
-    description: 'Umbral mínimo de confianza agregada para dirigir la ejecución al Puerto 0',
+    description: 'Minimum aggregate confidence threshold to route execution to Port 0',
   },
   {
     displayName: 'Ambiguity Threshold',
@@ -240,7 +240,7 @@ export const evaluateStateDescription: INodeProperties[] = [
         operation: ['evaluateState'],
       },
     },
-    description: 'Umbral de incertidumbre por debajo del cual se bifurca al Puerto 2',
+    description: 'Uncertainty threshold below which execution routes to Port 2',
   },
 ];
 

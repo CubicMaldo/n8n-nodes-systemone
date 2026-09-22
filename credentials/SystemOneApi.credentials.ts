@@ -19,7 +19,7 @@ export class SystemOneApi implements ICredentialType {
         { name: 'Ollama (Local / Edge)', value: 'ollama' },
       ],
       default: 'typesafe',
-      description: 'Motor de inferencia primario para la evaluación System 1',
+      description: 'Primary inference engine for System 1 evaluation',
     },
     {
       displayName: 'API Key',
@@ -32,7 +32,7 @@ export class SystemOneApi implements ICredentialType {
           provider: ['ollama'],
         },
       },
-      description: 'API Key para autenticarse con el proveedor primario',
+      description: 'API Key to authenticate with the primary provider',
     },
     {
       displayName: 'Custom Endpoint',
@@ -44,38 +44,25 @@ export class SystemOneApi implements ICredentialType {
           provider: ['typesafe', 'ollama'],
         },
       },
-      description: 'Endpoint HTTP base (compatible con proxies o despliegues locales)',
+      description: 'Base HTTP endpoint (compatible with proxies or local deployments)',
     },
     {
       displayName: 'Fallback Strategy',
       name: 'fallbackStrategy',
       type: 'options',
       options: [
-        { name: 'Google Gemini Flash (Zero-Friction Fallback)', value: 'gemini-flash' },
-        { name: 'Universal LLM Fallback (Groq, OpenAI, Claude, DeepSeek)', value: 'llm' },
+        { name: 'Universal LLM Fallback (Gemini, Groq, OpenAI, Claude, DeepSeek)', value: 'llm' },
         { name: 'Deterministic Heuristics (Offline, 0 Tokens, 0 Cost)', value: 'deterministic' },
       ],
-      default: 'gemini-flash',
-      description: 'Estrategia de resiliencia ante errores de red o rate limits (429)',
-    },
-    {
-      displayName: 'Gemini API Key (Fallback)',
-      name: 'geminiApiKey',
-      type: 'string',
-      typeOptions: { password: true },
-      default: '',
-      displayOptions: {
-        show: {
-          fallbackStrategy: ['gemini-flash'],
-        },
-      },
-      description: 'API key de Google Gemini usada si el motor primario falla o supera cuotas',
+      default: 'llm',
+      description: 'Resilience strategy for network errors or rate limits (429)',
     },
     {
       displayName: 'Fallback LLM Provider',
       name: 'fallbackProvider',
       type: 'options',
       options: [
+        { name: 'Google Gemini Flash (Recommended)', value: 'gemini' },
         { name: 'Groq (Llama 3.3 70B)', value: 'groq' },
         { name: 'OpenAI (gpt-4o-mini)', value: 'openai' },
         { name: 'Anthropic (Claude 3.5 Haiku)', value: 'anthropic' },
@@ -85,13 +72,13 @@ export class SystemOneApi implements ICredentialType {
         { name: 'Ollama (Local)', value: 'ollama' },
         { name: 'Custom OpenAI-Compatible Endpoint', value: 'custom' },
       ],
-      default: 'groq',
+      default: 'gemini',
       displayOptions: {
         show: {
           fallbackStrategy: ['llm'],
         },
       },
-      description: 'Proveedor LLM secundario para fallback universal',
+      description: 'Secondary LLM provider for universal fallback',
     },
     {
       displayName: 'Fallback API Key',
@@ -107,20 +94,20 @@ export class SystemOneApi implements ICredentialType {
           fallbackProvider: ['ollama'],
         },
       },
-      description: 'API key para el proveedor de fallback universal',
+      description: 'API key for the universal fallback provider',
     },
     {
       displayName: 'Fallback Model Name',
       name: 'fallbackModel',
       type: 'string',
       default: '',
-      placeholder: 'e.g. llama-3.3-70b-versatile, gpt-4o-mini',
+      placeholder: 'e.g. gemini-2.5-flash, llama-3.3-70b-versatile, gpt-4o-mini',
       displayOptions: {
         show: {
           fallbackStrategy: ['llm'],
         },
       },
-      description: 'Identificador del modelo de fallback (opcional, usa el predeterminado del proveedor si está vacío)',
+      description: 'Fallback model identifier (optional, uses the provider default if empty)',
     },
     {
       displayName: 'Fallback Base URL',
@@ -133,7 +120,7 @@ export class SystemOneApi implements ICredentialType {
           fallbackStrategy: ['llm'],
         },
       },
-      description: 'URL base personalizada para el proveedor de fallback',
+      description: 'Custom base URL for the fallback provider',
     },
   ];
 }

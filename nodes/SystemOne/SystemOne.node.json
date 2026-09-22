@@ -8,6 +8,11 @@
     "Development"
   ],
   "resources": {
+    "credentialDocumentation": [
+      {
+        "url": "https://github.com/CubicMaldo/n8n-nodes-systemone#credentials-setup"
+      }
+    ],
     "primaryDocumentation": [
       {
         "url": "https://github.com/CubicMaldo/n8n-nodes-systemone"

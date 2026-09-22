@@ -36,35 +36,44 @@
   "bugs": {
     "url": "https://github.com/CubicMaldo/n8n-nodes-systemone/issues"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && gulp copy:icons",
+    "build": "gulp build",
     "dev": "tsc --watch",
     "lint": "eslint nodes credentials --ext .ts",
     "lintfix": "eslint nodes credentials --ext .ts --fix",
-    "test": "node --test test/**/*.test.js test/**/*.test.ts || node --test test/*.test.js"
+    "test": "node --test test/**/*.test.js test/**/*.test.ts || node --test test/*.test.js",
+    "prepublishOnly": "npm run build && npm test"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "examples"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/SystemOneApi.credentials.js",
-      "dist/credentials/VaelisApi.credentials.js"
+      "dist/credentials/SystemOneApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/SystemOne/SystemOne.node.js"
     ]
   },
-  "dependencies": {
-    "@cubicmaldo/vaelis": "^1.1.2"
+  "peerDependencies": {
+    "n8n-workflow": "^1.0.0 || ^2.0.0"
   },
   "devDependencies": {
+    "@cubicmaldo/vaelis": "^1.1.2",
     "@types/gulp": "^4.0.17",
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "esbuild": "^0.28.2",
     "eslint": "^8.57.1",
     "gulp": "^5.0.0",
     "n8n-workflow": "^1.0.0 || ^2.0.0",

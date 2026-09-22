@@ -45,13 +45,13 @@ export class SystemOne implements INodeType {
           {
             name: 'Intercept Tool Call',
             value: 'interceptToolCall',
-            description: 'Auditar seguridad y guardrails de un comando antes de ejecutarlo',
+            description: 'Audit security and guardrails of a command before execution',
             action: 'Intercept a tool call with fast-path guardrails',
           },
           {
             name: 'Evaluate State',
             value: 'evaluateState',
-            description: 'Evaluar estado contra preguntas tipadas con confianza calibrada',
+            description: 'Evaluate state against typed questions with calibrated confidence',
             action: 'Evaluate state against typed questions',
           },
         ],
@@ -75,7 +75,6 @@ export class SystemOne implements INodeType {
       apiKey: credentials.apiKey as string,
       endpoint: credentials.endpoint as string,
       fallbackStrategy: credentials.fallbackStrategy as any,
-      geminiApiKey: credentials.geminiApiKey as string,
       fallbackProvider: credentials.fallbackProvider as string,
       fallbackApiKey: credentials.fallbackApiKey as string,
       fallbackModel: credentials.fallbackModel as string,
@@ -93,7 +92,7 @@ export class SystemOne implements INodeType {
         } else if (operation === 'evaluateState') {
           outcome = await executeEvaluateState.call(this, gateway, i, items[i]);
         } else {
-          throw new NodeOperationError(this.getNode(), `Operación no reconocida: ${operation}`, {
+          throw new NodeOperationError(this.getNode(), `Unrecognized operation: ${operation}`, {
             itemIndex: i,
           });
         }

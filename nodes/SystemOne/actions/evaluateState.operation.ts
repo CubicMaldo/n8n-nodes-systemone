@@ -37,7 +37,7 @@ export async function executeEvaluateState(
       try {
         rawState = jsonParse(jsonParam);
       } catch {
-        throw new NodeOperationError(this.getNode(), 'El parámetro State (JSON) no es un JSON válido', {
+        throw new NodeOperationError(this.getNode(), 'The State (JSON) parameter is not valid JSON', {
           itemIndex,
         });
       }
@@ -63,7 +63,7 @@ export async function executeEvaluateState(
       } catch {
         throw new NodeOperationError(
           this.getNode(),
-          'El parámetro Questions (JSON) no es un JSON válido',
+          'The Questions (JSON) parameter is not valid JSON',
           { itemIndex },
         );
       }
@@ -91,7 +91,7 @@ export async function executeEvaluateState(
   } else {
     const formRules = this.getNodeParameter('rules.rule', itemIndex, []) as RuleFormValue[];
     if (!formRules.length) {
-      throw new NodeOperationError(this.getNode(), 'Debe definir al menos una regla de decisión', {
+      throw new NodeOperationError(this.getNode(), 'You must define at least one decision rule', {
         itemIndex,
       });
     }

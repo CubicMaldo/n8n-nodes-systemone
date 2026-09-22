@@ -1,0 +1,42 @@
+# Publishes the package to npm when a version tag (e.g. 0.2.0 or v0.2.0) is pushed.
+#
+# n8n requires community nodes to be published from GitHub Actions with npm provenance.
+# One-time npm setup:
+#   1. Access token (first publish): Set NPM_TOKEN in GitHub repository secrets.
+#   2. Trusted Publishing (recommended once on npm): Configure GitHub Actions in npmjs.com package settings.
+
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - '*.*.*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
+      - run: npm run lint
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+

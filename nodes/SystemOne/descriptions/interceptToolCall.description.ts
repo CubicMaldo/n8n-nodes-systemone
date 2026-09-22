@@ -13,7 +13,7 @@ export const interceptToolCallDescription: INodeProperties[] = [
         operation: ['interceptToolCall'],
       },
     },
-    description: 'El comando, script bash, sentencia SQL o payload de tool a evaluar perimetralmente',
+    description: 'The command, bash script, SQL statement, or tool payload to evaluate at the perimeter',
   },
   {
     displayName: 'Context / Intent',
@@ -23,13 +23,13 @@ export const interceptToolCallDescription: INodeProperties[] = [
       rows: 3,
     },
     default: '',
-    placeholder: 'Usuario solicita lectura de registros activos para reporte mensual',
+    placeholder: 'User requests reading active records for monthly report',
     displayOptions: {
       show: {
         operation: ['interceptToolCall'],
       },
     },
-    description: 'Contexto de ejecución, prompt del usuario o intención del agente autónomo',
+    description: 'Execution context, user prompt, or autonomous agent intent',
   },
   {
     displayName: 'Is Production?',
@@ -54,7 +54,7 @@ export const interceptToolCallDescription: INodeProperties[] = [
         operation: ['interceptToolCall'],
       },
     },
-    description: 'Rol o nivel de privilegios del agente que solicita la ejecución',
+    description: 'Role or privilege level of the agent requesting execution',
   },
   {
     displayName: 'High Confidence Threshold',
@@ -71,7 +71,7 @@ export const interceptToolCallDescription: INodeProperties[] = [
         operation: ['interceptToolCall'],
       },
     },
-    description: 'Umbral mínimo de confianza para dirigir la ejecución al Puerto 0 (High Confidence / Deterministic)',
+    description: 'Minimum confidence threshold to route execution to Port 0 (High Confidence / Deterministic)',
   },
   {
     displayName: 'Ambiguity Threshold',
@@ -88,7 +88,7 @@ export const interceptToolCallDescription: INodeProperties[] = [
         operation: ['interceptToolCall'],
       },
     },
-    description: 'Umbral de incertidumbre por debajo del cual se escala directamente al Puerto 2 (Escalate / HITL)',
+    description: 'Uncertainty threshold below which execution escalates directly to Port 2 (Escalate / HITL)',
   },
 ];
 

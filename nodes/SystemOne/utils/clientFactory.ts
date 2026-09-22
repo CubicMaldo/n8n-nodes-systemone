@@ -11,8 +11,7 @@ export interface VaelisCredentialsData {
   provider?: string;
   apiKey?: string;
   endpoint?: string;
-  fallbackStrategy?: 'gemini-flash' | 'llm' | 'deterministic';
-  geminiApiKey?: string;
+  fallbackStrategy?: 'llm' | 'deterministic';
   fallbackProvider?: string;
   fallbackApiKey?: string;
   fallbackModel?: string;
@@ -24,22 +23,22 @@ interface CachedGatewayEntry {
   gateway: VaelisGateway;
 }
 
+const MAX_POOL_SIZE = 32;
 const gatewayPool = new Map<string, CachedGatewayEntry>();
 
 function computeCacheKey(credentials: VaelisCredentialsData): string {
   const provider = credentials.provider || 'typesafe';
   const apiKey = credentials.apiKey ? credentials.apiKey.slice(-6) : 'none';
   const endpoint = credentials.endpoint || 'default';
-  const strategy = credentials.fallbackStrategy || 'auto';
-  const geminiKey = credentials.geminiApiKey ? credentials.geminiApiKey.slice(-6) : 'none';
+  const strategy = credentials.fallbackStrategy || 'deterministic';
   const fallbackProv = credentials.fallbackProvider || 'none';
   const fallbackKey = credentials.fallbackApiKey ? credentials.fallbackApiKey.slice(-6) : 'none';
-  return `${provider}::${endpoint}::${apiKey}::${strategy}::${geminiKey}::${fallbackProv}::${fallbackKey}`;
+  return `${provider}::${endpoint}::${apiKey}::${strategy}::${fallbackProv}::${fallbackKey}`;
 }
 
 /**
- * Obtiene o inicializa del pool una instancia de VaelisGateway y VaelisClient
- * configurada con las credenciales del nodo y las capacidades de Vaelis 1.1.2+.
+ * Gets or initializes from the pool a VaelisGateway and VaelisClient instance
+ * configured with the node credentials and Vaelis 1.1.2+ capabilities.
  */
 export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGateway {
   const cacheKey = computeCacheKey(credentials);
@@ -52,7 +51,6 @@ export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGate
   const provider = (credentials.provider || 'typesafe') as SystemOneProvider;
   const apiKey = credentials.apiKey?.trim();
   const endpoint = credentials.endpoint?.trim() || 'https://api.typesafe.ai';
-  const geminiApiKey = credentials.geminiApiKey?.trim();
   const fallbackStrategy = credentials.fallbackStrategy;
 
   let fallback: EvaluatorConfig['fallback'] = 'deterministic';
@@ -61,24 +59,17 @@ export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGate
   if (fallbackStrategy === 'llm' && (credentials.fallbackApiKey || credentials.fallbackProvider === 'ollama')) {
     fallback = 'llm';
     llmFallback = {
-      provider: (credentials.fallbackProvider || 'groq') as SupportedLLMProvider,
+      provider: (credentials.fallbackProvider || 'gemini') as SupportedLLMProvider,
       apiKey: credentials.fallbackApiKey?.trim(),
       model: credentials.fallbackModel?.trim() || undefined,
       baseUrl: credentials.fallbackBaseUrl?.trim() || undefined,
     };
-  } else if (fallbackStrategy === 'gemini-flash' || (!fallbackStrategy && geminiApiKey)) {
-    fallback = 'gemini-flash';
-  } else if (fallbackStrategy === 'deterministic') {
-    fallback = 'deterministic';
-  } else if (geminiApiKey) {
-    fallback = 'gemini-flash';
   }
 
   const client = new VaelisClient({
     provider,
     apiKey,
     endpoint,
-    geminiApiKey,
     fallback,
     llmFallback,
     fallbackOnAuthError: true,
@@ -86,12 +77,20 @@ export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGate
 
   const gateway = new VaelisGateway(client);
 
+  // Evict oldest entry if pool exceeds max size
+  if (gatewayPool.size >= MAX_POOL_SIZE) {
+    const oldestKey = gatewayPool.keys().next().value;
+    if (oldestKey !== undefined) {
+      gatewayPool.delete(oldestKey);
+    }
+  }
+
   gatewayPool.set(cacheKey, { client, gateway });
   return gateway;
 }
 
 /**
- * Limpia el pool de conexiones en memoria (útil en tests o reset de credenciales).
+ * Clears the in-memory connection pool (useful for tests or credential resets).
  */
 export function clearGatewayPool(): void {
   gatewayPool.clear();

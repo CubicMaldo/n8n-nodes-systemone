@@ -22,7 +22,7 @@ export const commonOptionsDescription: INodeProperties[] = [
         name: 'outputField',
         type: 'string',
         default: 'vaelis',
-        description: 'Nombre del campo JSON donde se almacenará el veredicto o resultado',
+        description: 'Name of the JSON field where the verdict or result will be stored',
       },
     ],
   },
