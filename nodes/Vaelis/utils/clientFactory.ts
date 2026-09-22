@@ -1,10 +1,22 @@
-import { VaelisClient, VaelisGateway, SystemOneProvider } from '@cubicmaldo/vaelis';
+import {
+  VaelisClient,
+  VaelisGateway,
+  SystemOneProvider,
+  LLMFallbackConfig,
+  SupportedLLMProvider,
+  EvaluatorConfig,
+} from '@cubicmaldo/vaelis';
 
 export interface VaelisCredentialsData {
   provider?: string;
   apiKey?: string;
   endpoint?: string;
+  fallbackStrategy?: 'gemini-flash' | 'llm' | 'deterministic';
   geminiApiKey?: string;
+  fallbackProvider?: string;
+  fallbackApiKey?: string;
+  fallbackModel?: string;
+  fallbackBaseUrl?: string;
 }
 
 interface CachedGatewayEntry {
@@ -18,13 +30,16 @@ function computeCacheKey(credentials: VaelisCredentialsData): string {
   const provider = credentials.provider || 'typesafe';
   const apiKey = credentials.apiKey ? credentials.apiKey.slice(-6) : 'none';
   const endpoint = credentials.endpoint || 'default';
+  const strategy = credentials.fallbackStrategy || 'auto';
   const geminiKey = credentials.geminiApiKey ? credentials.geminiApiKey.slice(-6) : 'none';
-  return `${provider}::${endpoint}::${apiKey}::${geminiKey}`;
+  const fallbackProv = credentials.fallbackProvider || 'none';
+  const fallbackKey = credentials.fallbackApiKey ? credentials.fallbackApiKey.slice(-6) : 'none';
+  return `${provider}::${endpoint}::${apiKey}::${strategy}::${geminiKey}::${fallbackProv}::${fallbackKey}`;
 }
 
 /**
  * Obtiene o inicializa del pool una instancia de VaelisGateway y VaelisClient
- * configurada con las credenciales del nodo.
+ * configurada con las credenciales del nodo y las capacidades de Vaelis 1.1.2+.
  */
 export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGateway {
   const cacheKey = computeCacheKey(credentials);
@@ -38,9 +53,26 @@ export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGate
   const apiKey = credentials.apiKey?.trim();
   const endpoint = credentials.endpoint?.trim() || 'https://api.typesafe.ai';
   const geminiApiKey = credentials.geminiApiKey?.trim();
+  const fallbackStrategy = credentials.fallbackStrategy;
 
-  // Si se provee geminiApiKey, se usa como fallback; en caso contrario, fallback determinista
-  const fallback = geminiApiKey ? 'gemini-flash' : 'deterministic';
+  let fallback: EvaluatorConfig['fallback'] = 'deterministic';
+  let llmFallback: LLMFallbackConfig | undefined;
+
+  if (fallbackStrategy === 'llm' && (credentials.fallbackApiKey || credentials.fallbackProvider === 'ollama')) {
+    fallback = 'llm';
+    llmFallback = {
+      provider: (credentials.fallbackProvider || 'groq') as SupportedLLMProvider,
+      apiKey: credentials.fallbackApiKey?.trim(),
+      model: credentials.fallbackModel?.trim() || undefined,
+      baseUrl: credentials.fallbackBaseUrl?.trim() || undefined,
+    };
+  } else if (fallbackStrategy === 'gemini-flash' || (!fallbackStrategy && geminiApiKey)) {
+    fallback = 'gemini-flash';
+  } else if (fallbackStrategy === 'deterministic') {
+    fallback = 'deterministic';
+  } else if (geminiApiKey) {
+    fallback = 'gemini-flash';
+  }
 
   const client = new VaelisClient({
     provider,
@@ -48,6 +80,7 @@ export function getVaelisGateway(credentials: VaelisCredentialsData): VaelisGate
     endpoint,
     geminiApiKey,
     fallback,
+    llmFallback,
     fallbackOnAuthError: true,
   });
 

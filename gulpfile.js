@@ -6,3 +6,4 @@ function copyIcons() {
 
 exports['copy:icons'] = copyIcons;
 exports.default = copyIcons;
+

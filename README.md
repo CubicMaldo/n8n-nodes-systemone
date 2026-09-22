@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-vaelis.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/n8n-nodes-vaelis)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat-square)](LICENSE)
-[![Tests Passing](https://img.shields.io/badge/tests-16%2F16%20passed-brightgreen.svg?style=flat-square)](#testing--verification)
+[![Tests Passing](https://img.shields.io/badge/tests-18%2F18%20passed-brightgreen.svg?style=flat-square)](#testing--verification)
 [![TypeScript 5.x](https://img.shields.io/badge/TypeScript-5.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![n8n Community Node](https://img.shields.io/badge/n8n-community--node-EA4B71.svg?style=flat-square)](https://docs.n8n.io/integrations/community-nodes/)
 
@@ -105,10 +105,13 @@ npm link n8n-nodes-vaelis
 
 1. In n8n, create a new credential: **Vaelis & TypeSafe API**.
 2. Fill in:
-   - **Provider**: `TypeSafe AI (Jev Cloud)` or `Gemini Flash (System 2 Fallback)`.
-   - **TypeSafe API Key**: Your API key from [TypeSafe Cloud](https://typesafe.ai).
-   - **Custom Endpoint**: `https://api.typesafe.ai` (or your edge proxy).
-   - **Gemini API Key (Fallback)** *(Recommended)*: Your Google Gemini API key. If TypeSafe Cloud experiences rate limits (429) or network hiccups, Vaelis automatically falls back to Gemini Flash with structured output to ensure uninterrupted workflow execution.
+   - **Primary Engine Provider**: `TypeSafe AI (Jev Cloud - Default)`, `Google Gemini Flash`, `Groq (Llama 3.3)`, `OpenAI (gpt-4o-mini)`, `DeepSeek V3`, `Anthropic (Claude 3.5 Haiku)`, or `Ollama (Local)`.
+   - **API Key**: Primary API key for the chosen provider.
+   - **Custom Endpoint**: `https://api.typesafe.ai` (or your edge proxy/local LLM host).
+   - **Fallback Strategy**:
+     - **Google Gemini Flash**: Zero-friction cloud fallback with calibrated structured outputs.
+     - **Universal LLM Fallback**: Resilient fallback to Groq, OpenAI, Anthropic, DeepSeek, OpenRouter, or Ollama if TypeSafe Cloud experiences rate limits (429) or network hiccups.
+     - **Deterministic Heuristics**: Offline heuristics running in 0 ms with 0 token spend.
 
 ---
 
@@ -126,7 +129,7 @@ Import these directly into n8n from the [`examples/`](examples) folder:
 
 ## 🧪 Testing & Verification
 
-The package includes a comprehensive automated test suite testing the 3 physical ports, sub-1ms lethal command guardrails, and state sanitization:
+The package includes a comprehensive automated test suite testing the 3 physical ports, sub-1ms lethal command guardrails, state sanitization, and universal fallback:
 
 ```bash
 # Transpile TypeScript and copy icons
@@ -144,10 +147,11 @@ npm run lint
 ✔ Node Structure & Metadata (3 outputs, credentials, properties)
 ✔ Motor de Umbrales y Enrutamiento Determinista (Port 0, 1, 2)
 ✔ Sanitización y Límites de Estado (32k token boundary)
-✔ Operación interceptToolCall ("rm -rf /" blocked in 1.4ms)
+✔ Client Factory & Universal LLM Fallback (Groq / OpenAI / Gemini)
+✔ Operación interceptToolCall ("rm -rf /" blocked in 1.3ms)
 ✔ Operación evaluateState (Structured rules & JSON schema)
 ✔ Ejecución Integral del Nodo Vaelis (Multi-item physical branch distribution)
-16 passed, 0 failed
+18 passed, 0 failed
 ```
 
 ---
@@ -161,3 +165,4 @@ npm run lint
 ## 📜 License
 
 [Apache-2.0](LICENSE) © [CubicMaldo](https://github.com/CubicMaldo)
+

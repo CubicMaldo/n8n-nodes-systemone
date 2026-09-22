@@ -46,3 +46,4 @@ export function normalizeStatePayload(input: unknown, maxChars: number = 32000):
   }
   return serialized;
 }
+

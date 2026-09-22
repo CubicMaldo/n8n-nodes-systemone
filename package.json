@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-vaelis",
-  "version": "0.1.0",
-  "description": "The enterprise Jev & System 1 Gateway for n8n: sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and deterministic fast-path powered by Vaelis.",
+  "version": "0.2.0",
+  "description": "The enterprise Jev & System 1 Gateway for n8n: sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and Universal LLM fallback powered by Vaelis.",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
@@ -15,6 +15,10 @@
     "agent-security",
     "fast-path",
     "vaelis",
+    "llm-fallback",
+    "groq",
+    "openai",
+    "deepseek",
     "llm-cost-reduction",
     "ai-agent-tool"
   ],
@@ -51,14 +55,14 @@
     ]
   },
   "dependencies": {
-    "@cubicmaldo/vaelis": "^0.1.0 || ^1.0.0"
+    "@cubicmaldo/vaelis": "^1.1.2"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.17",
     "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
     "gulp": "^5.0.0",
     "n8n-workflow": "^1.0.0 || ^2.0.0",
     "typescript": "^5.0.0"

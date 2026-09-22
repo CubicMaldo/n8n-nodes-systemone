@@ -46,14 +46,19 @@ describe('Vaelis Gateway n8n Community Package', () => {
       assert.ok(opValues.includes('evaluateState'));
     });
 
-    it('debe validar la estructura de VaelisApi credentials', () => {
+    it('debe validar la estructura de VaelisApi credentials con Universal LLM Fallback', () => {
       const creds = new VaelisApi();
       assert.strictEqual(creds.name, 'vaelisApi');
       const propNames = creds.properties.map((p) => p.name);
       assert.ok(propNames.includes('provider'));
       assert.ok(propNames.includes('apiKey'));
       assert.ok(propNames.includes('endpoint'));
+      assert.ok(propNames.includes('fallbackStrategy'));
       assert.ok(propNames.includes('geminiApiKey'));
+      assert.ok(propNames.includes('fallbackProvider'));
+      assert.ok(propNames.includes('fallbackApiKey'));
+      assert.ok(propNames.includes('fallbackModel'));
+      assert.ok(propNames.includes('fallbackBaseUrl'));
     });
   });
 
@@ -141,6 +146,25 @@ describe('Vaelis Gateway n8n Community Package', () => {
       const hugeInput = 'A'.repeat(50000);
       const output = normalizeStatePayload(hugeInput, 32000);
       assert.strictEqual(output.length, 32000);
+    });
+  });
+
+  describe('Client Factory & Universal LLM Fallback (Vaelis 1.1.2+)', () => {
+    it('debe configurar gateway con Universal LLM Fallback (Groq/OpenAI)', () => {
+      const gateway = getVaelisGateway({
+        provider: 'typesafe',
+        fallbackStrategy: 'llm',
+        fallbackProvider: 'groq',
+        fallbackApiKey: 'gsk_mock_12345',
+        fallbackModel: 'llama-3.3-70b-versatile',
+      });
+      assert.ok(gateway);
+    });
+
+    it('debe reutilizar instancias del pool para credenciales equivalentes', () => {
+      const g1 = getVaelisGateway({ provider: 'gemini-flash', apiKey: 'test-123' });
+      const g2 = getVaelisGateway({ provider: 'gemini-flash', apiKey: 'test-123' });
+      assert.strictEqual(g1, g2);
     });
   });
 

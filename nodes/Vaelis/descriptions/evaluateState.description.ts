@@ -243,3 +243,4 @@ export const evaluateStateDescription: INodeProperties[] = [
     description: 'Umbral de incertidumbre por debajo del cual se bifurca al Puerto 2',
   },
 ];
+

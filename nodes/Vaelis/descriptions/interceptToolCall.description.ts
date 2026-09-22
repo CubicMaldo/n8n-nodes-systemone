@@ -91,3 +91,4 @@ export const interceptToolCallDescription: INodeProperties[] = [
     description: 'Umbral de incertidumbre por debajo del cual se escala directamente al Puerto 2 (Escalate / HITL)',
   },
 ];
+

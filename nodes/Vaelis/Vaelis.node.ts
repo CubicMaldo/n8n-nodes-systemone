@@ -118,3 +118,4 @@ export class Vaelis implements INodeType {
     return [highBranch, mediumBranch, escalateBranch];
   }
 }
+

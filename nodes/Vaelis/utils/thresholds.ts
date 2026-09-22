@@ -43,3 +43,4 @@ export function determineRoutingPort(params: RoutingEvaluationParams): RoutingPo
   // Si está en la zona de incertidumbre / ambigüedad moderada -> Puerto 1
   return PORT_MEDIUM;
 }
+
