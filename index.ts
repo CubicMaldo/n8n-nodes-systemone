@@ -1,6 +1,5 @@
-export { Vaelis } from './nodes/Vaelis/Vaelis.node';
-export { VaelisApi } from './credentials/VaelisApi.credentials';
-export * from './nodes/Vaelis/utils/thresholds';
-export * from './nodes/Vaelis/utils/stateEngine';
-export * from './nodes/Vaelis/utils/clientFactory';
-
+export { SystemOne, Vaelis } from './nodes/SystemOne/SystemOne.node';
+export { SystemOneApi, VaelisApi } from './credentials/SystemOneApi.credentials';
+export * from './nodes/SystemOne/utils/thresholds';
+export * from './nodes/SystemOne/utils/stateEngine';
+export * from './nodes/SystemOne/utils/clientFactory';

@@ -13,17 +13,17 @@ import {
 import { executeInterceptToolCall, executeEvaluateState } from './actions';
 import { getVaelisGateway } from './utils/clientFactory';
 
-export class Vaelis implements INodeType {
+export class SystemOne implements INodeType {
   description: INodeTypeDescription = {
-    displayName: 'Vaelis Gateway',
-    name: 'vaelis',
-    icon: 'file:vaelis.svg',
+    displayName: 'System 1 Gateway (Jev)',
+    name: 'systemOne',
+    icon: 'file:systemone.svg',
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"]}}',
-    description: 'Sub-100ms Fast-Path & Safety Gateway using System 1 Calibrated Decisions',
+    description: 'Sub-80ms Fast-Path & Safety Gateway using TypeSafe Jev & System 1 Calibrated Decisions',
     defaults: {
-      name: 'Vaelis Gateway',
+      name: 'System 1 Gateway',
     },
     usableAsTool: true,
     inputs: ['main'],
@@ -31,7 +31,7 @@ export class Vaelis implements INodeType {
     outputNames: ['High (Deterministic)', 'Medium (System 2 Ambiguity)', 'Escalate (HITL / Block)'],
     credentials: [
       {
-        name: 'vaelisApi',
+        name: 'systemOneApi',
         required: true,
       },
     ],
@@ -69,12 +69,17 @@ export class Vaelis implements INodeType {
     const mediumBranch: INodeExecutionData[] = [];
     const escalateBranch: INodeExecutionData[] = [];
 
-    const credentials = await this.getCredentials('vaelisApi');
+    const credentials = await this.getCredentials('systemOneApi');
     const gateway = getVaelisGateway({
       provider: credentials.provider as string,
       apiKey: credentials.apiKey as string,
       endpoint: credentials.endpoint as string,
+      fallbackStrategy: credentials.fallbackStrategy as any,
       geminiApiKey: credentials.geminiApiKey as string,
+      fallbackProvider: credentials.fallbackProvider as string,
+      fallbackApiKey: credentials.fallbackApiKey as string,
+      fallbackModel: credentials.fallbackModel as string,
+      fallbackBaseUrl: credentials.fallbackBaseUrl as string,
     });
 
     for (let i = 0; i < items.length; i++) {
@@ -105,7 +110,7 @@ export class Vaelis implements INodeType {
           escalateBranch.push({
             json: {
               ...items[i].json,
-              error: error.message || 'Error occurred during Vaelis Gateway execution',
+              error: error.message || 'Error occurred during System 1 Gateway execution',
             },
             pairedItem: { item: i },
           });
@@ -119,3 +124,7 @@ export class Vaelis implements INodeType {
   }
 }
 
+/**
+ * Backwards compatibility alias for existing workflow definitions.
+ */
+export const Vaelis = SystemOne;

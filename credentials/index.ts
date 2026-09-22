@@ -1,2 +1,1 @@
-export { VaelisApi } from './VaelisApi.credentials';
-
+export { SystemOneApi, VaelisApi } from './SystemOneApi.credentials';

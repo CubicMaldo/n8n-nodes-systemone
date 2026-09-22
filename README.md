@@ -1,13 +1,13 @@
-# Jev Fast-Path Gateway for n8n
+# System 1 Gateway for n8n (TypeSafe Jev)
 
-[![npm version](https://img.shields.io/npm/v/n8n-nodes-vaelis.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/n8n-nodes-vaelis)
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-systemone.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/n8n-nodes-systemone)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat-square)](LICENSE)
-[![Tests Passing](https://img.shields.io/badge/tests-18%2F18%20passed-brightgreen.svg?style=flat-square)](#testing--verification)
+[![Tests Passing](https://img.shields.io/badge/tests-19%2F19%20passed-brightgreen.svg?style=flat-square)](#testing--verification)
 [![TypeScript 5.x](https://img.shields.io/badge/TypeScript-5.x-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![n8n Community Node](https://img.shields.io/badge/n8n-community--node-EA4B71.svg?style=flat-square)](https://docs.n8n.io/integrations/community-nodes/)
 
-> **The Enterprise-Grade System 1 Gateway for TypeSafe Jev in n8n workflows.**  
-> Sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and deterministic fast-paths powered discretely by the high-performance [`@cubicmaldo/vaelis`](https://github.com/CubicMaldo/vaelis) engine.
+> **The Enterprise-Grade System 1 Gateway for TypeSafe Jev & Cognitive AI in n8n workflows.**  
+> Sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and Universal LLM fallback powered discretely by the high-performance [`@cubicmaldo/vaelis`](https://github.com/CubicMaldo/vaelis) engine.
 
 ---
 
@@ -17,21 +17,21 @@
 
 Standard LLM nodes (GPT-4o, Claude 3.5 Sonnet, Gemini Pro) are slow (1,500 - 4,000 ms) and expensive ($3 - $15 / million tokens) when used simply to categorize incoming data, check policies, or route tickets.
 
-**`n8n-nodes-vaelis`** brings the **TypeSafe Jev** model directly to your n8n workflows as an industrial-grade **System 1 Gateway**. By leveraging mathematical calibrated probabilities and perimeter defenses, your workflows decide routing in milliseconds, consume **0 LLM tokens** for confident operations, and instantly block lethal agent commands.
+**`n8n-nodes-systemone`** brings **System 1 Models (TypeSafe Jev)** directly to your n8n workflows as an industrial-grade **Fast-Path Gateway**. By leveraging mathematical calibrated probabilities and perimeter defenses, your workflows decide routing in milliseconds, consume **0 LLM tokens** for confident operations, and instantly block lethal agent commands.
 
 ---
 
-## 🚀 Why This Node Outperforms Standard Jev Implementations
+## 🚀 Why This Gateway Outperforms Basic Jev Implementations
 
-While basic community nodes (such as `n8n-nodes-jev`) act as simple HTTP wrappers around the API, `n8n-nodes-vaelis` is an **architected safety gateway** built for production autonomy:
+While basic community nodes (such as `n8n-nodes-jev`) act as simple single-output HTTP wrappers around the API, `n8n-nodes-systemone` is an **architected safety gateway** built for production autonomy:
 
-| Capability | `n8n-nodes-jev` | `n8n-nodes-vaelis` (Enterprise Jev Gateway) |
+| Capability | `n8n-nodes-jev` | `n8n-nodes-systemone` (System 1 Gateway) |
 | :--- | :---: | :---: |
 | **Physical Output Ports** | Single output or soft switch | **3 Distinct Physical Output Ports** (`High`, `Medium`, `Escalate`) |
 | **Zero-Token Fast-Path** | ❌ Unconditional LLM token spend | **✅ 0 LLM Tokens** on deterministic path ($\ge 0.90$ confidence) |
 | **Perimeter Static Guardrail** | ❌ None | **✅ Sub-1ms Static Regex Defense** (`rm -rf`, `DROP TABLE`, etc.) |
 | **Prompt Injection Defense** | ❌ None | **✅ Dual-Query Cross-Check & Adversarial Freeze** |
-| **Offline / Resilient Fallback** | ❌ Workflow fails on 429 / outage | **✅ Automatic Gemini Flash Fallback** (99.99% uptime) |
+| **Universal LLM Fallback** | ❌ Workflow fails on 429 / outage | **✅ Automatic Fallback (Groq, OpenAI, Gemini, Claude, Ollama)** |
 | **Context Window Bounding** | ❌ Unbounded payload size | **✅ Strict 32k Token / Character Sanitizer** |
 | **Connection Pooling** | ❌ New HTTP client per item | **✅ In-memory Gateway & Client Connection Pooling** |
 | **Live Savings Telemetry** | ❌ None | **✅ Computes `tokenSavingsPercent` & `costSavingsEstimateUsd`** |
@@ -41,11 +41,11 @@ While basic community nodes (such as `n8n-nodes-jev`) act as simple HTTP wrapper
 
 ## 🔌 3 Physical Hardware-like Output Ports
 
-Unlike conventional single-output nodes that require cascades of IF/Switch nodes, `n8n-nodes-vaelis` splits execution physically into 3 hardware-like terminals:
+Unlike conventional single-output nodes that require cascades of IF/Switch nodes, `n8n-nodes-systemone` splits execution physically into 3 hardware-like terminals:
 
 ```mermaid
 flowchart LR
-    A[Incoming Item / Agent Command] --> B[Vaelis Jev Gateway]
+    A[Incoming Item / Agent Command] --> B[System 1 Gateway]
     B -->|minConfidence >= 0.90 & allowed| Port0["🟢 Port 0: High Confidence<br/>(Deterministic: Postgres / HTTP / Stripe)<br/>0 LLM Tokens"]
     B -->|0.65 <= minConfidence < 0.90| Port1["🟡 Port 1: System 2 Ambiguity<br/>(Deep LLM: Claude / GPT-4o / Gemini)"]
     B -->|minConfidence < 0.65 or Lethal/Block| Port2["🔴 Port 2: Escalate & Security Block<br/>(Human-in-the-Loop: Slack / Jira)"]
@@ -86,24 +86,24 @@ Evaluates any incoming text or JSON against typed questions:
 ### In your n8n instance:
 1. Go to **Settings** → **Community Nodes**.
 2. Click **Install**.
-3. Enter `n8n-nodes-vaelis` and click **Install**.
+3. Enter `n8n-nodes-systemone` and click **Install**.
 
 ### For local development or self-hosted Docker:
 ```bash
 cd ~/.n8n/custom
-npm install n8n-nodes-vaelis
+npm install n8n-nodes-systemone
 # Or link locally:
-cd /path/to/n8n-nodes-vaelis
+cd /path/to/n8n-nodes-systemone
 npm link
 cd ~/.n8n/custom
-npm link n8n-nodes-vaelis
+npm link n8n-nodes-systemone
 ```
 
 ---
 
 ## 🔑 Credentials Setup
 
-1. In n8n, create a new credential: **Vaelis & TypeSafe API**.
+1. In n8n, create a new credential: **System 1 (TypeSafe Jev & Fallback) API**.
 2. Fill in:
    - **Primary Engine Provider**: `TypeSafe AI (Jev Cloud - Default)`, `Google Gemini Flash`, `Groq (Llama 3.3)`, `OpenAI (gpt-4o-mini)`, `DeepSeek V3`, `Anthropic (Claude 3.5 Haiku)`, or `Ollama (Local)`.
    - **API Key**: Primary API key for the chosen provider.
@@ -145,24 +145,24 @@ npm run lint
 **Test results**:
 ```text
 ✔ Node Structure & Metadata (3 outputs, credentials, properties)
+✔ Compatibility with Vaelis alias
 ✔ Motor de Umbrales y Enrutamiento Determinista (Port 0, 1, 2)
 ✔ Sanitización y Límites de Estado (32k token boundary)
 ✔ Client Factory & Universal LLM Fallback (Groq / OpenAI / Gemini)
 ✔ Operación interceptToolCall ("rm -rf /" blocked in 1.3ms)
 ✔ Operación evaluateState (Structured rules & JSON schema)
-✔ Ejecución Integral del Nodo Vaelis (Multi-item physical branch distribution)
-18 passed, 0 failed
+✔ Ejecución Integral del Nodo SystemOne (Multi-item physical branch distribution)
+19 passed, 0 failed
 ```
 
 ---
 
-## 🛡 Discrete Engine Notice
+## 🛡 Discrete Core Engine
 
-`n8n-nodes-vaelis` is built on top of the open-source [`@cubicmaldo/vaelis`](https://www.npmjs.com/package/@cubicmaldo/vaelis) SDK, designed to provide high-performance edge heuristics, state engineering, and mathematical confidence calibration for System 1 architectures. It connects natively to TypeSafe Jev and Google Gemini models.
+`n8n-nodes-systemone` utilizes the open-source [`@cubicmaldo/vaelis`](https://www.npmjs.com/package/@cubicmaldo/vaelis) SDK as its discrete underlying engine to provide high-performance edge heuristics, state engineering, and mathematical confidence calibration for System 1 architectures.
 
 ---
 
 ## 📜 License
 
 [Apache-2.0](LICENSE) © [CubicMaldo](https://github.com/CubicMaldo)
-

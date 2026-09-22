@@ -63,14 +63,14 @@
         }
       },
       "id": "3",
-      "name": "Jev Fast-Path Gateway",
-      "type": "n8n-nodes-vaelis.vaelis",
+      "name": "System 1 Fast-Path Gateway",
+      "type": "n8n-nodes-systemone.systemOne",
       "typeVersion": 1,
       "position": [660, 300],
       "credentials": {
-        "vaelisApi": {
-          "id": "vaelis_creds",
-          "name": "TypeSafe Jev API"
+        "systemOneApi": {
+          "id": "systemone_creds",
+          "name": "TypeSafe Jev & System 1 API"
         }
       }
     },
@@ -121,14 +121,14 @@
       "main": [
         [
           {
-            "node": "Jev Fast-Path Gateway",
+            "node": "System 1 Fast-Path Gateway",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Jev Fast-Path Gateway": {
+    "System 1 Fast-Path Gateway": {
       "main": [
         [
           {

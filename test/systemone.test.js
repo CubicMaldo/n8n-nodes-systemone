@@ -1,26 +1,27 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert');
-const { Vaelis } = require('../dist/nodes/Vaelis/Vaelis.node');
-const { VaelisApi } = require('../dist/credentials/VaelisApi.credentials');
+const { SystemOne, Vaelis } = require('../dist/nodes/SystemOne/SystemOne.node');
+const { SystemOneApi, VaelisApi } = require('../dist/credentials/SystemOneApi.credentials');
 const {
   determineRoutingPort,
   PORT_HIGH,
   PORT_MEDIUM,
   PORT_ESCALATE,
-} = require('../dist/nodes/Vaelis/utils/thresholds');
+} = require('../dist/nodes/SystemOne/utils/thresholds');
 const {
   sanitizeAndTruncateState,
   normalizeStatePayload,
-} = require('../dist/nodes/Vaelis/utils/stateEngine');
-const { getVaelisGateway } = require('../dist/nodes/Vaelis/utils/clientFactory');
-const { executeInterceptToolCall } = require('../dist/nodes/Vaelis/actions/interceptToolCall.operation');
+} = require('../dist/nodes/SystemOne/utils/stateEngine');
+const { getVaelisGateway } = require('../dist/nodes/SystemOne/utils/clientFactory');
+const { executeInterceptToolCall } = require('../dist/nodes/SystemOne/actions/interceptToolCall.operation');
+const { executeEvaluateState } = require('../dist/nodes/SystemOne/actions/evaluateState.operation');
 
-describe('Vaelis Gateway n8n Community Package', () => {
+describe('System 1 Gateway (Jev & TypeSafe) n8n Community Package', () => {
   describe('Node Structure & Metadata', () => {
     it('debe declarar exactamente 3 puertos físicos de salida con etiquetas descriptivas', () => {
-      const node = new Vaelis();
-      assert.strictEqual(node.description.name, 'vaelis');
-      assert.strictEqual(node.description.displayName, 'Vaelis Gateway');
+      const node = new SystemOne();
+      assert.strictEqual(node.description.name, 'systemOne');
+      assert.strictEqual(node.description.displayName, 'System 1 Gateway (Jev)');
       assert.strictEqual(node.description.usableAsTool, true);
       assert.deepStrictEqual(node.description.outputs, ['main', 'main', 'main']);
       assert.deepStrictEqual(node.description.outputNames, [
@@ -30,15 +31,20 @@ describe('Vaelis Gateway n8n Community Package', () => {
       ]);
     });
 
-    it('debe requerir la credencial vaelisApi', () => {
+    it('debe mantener compatibilidad con el alias Vaelis', () => {
       const node = new Vaelis();
+      assert.strictEqual(node.description.name, 'systemOne');
+    });
+
+    it('debe requerir la credencial systemOneApi', () => {
+      const node = new SystemOne();
       assert.deepStrictEqual(node.description.credentials, [
-        { name: 'vaelisApi', required: true },
+        { name: 'systemOneApi', required: true },
       ]);
     });
 
     it('debe exponer las operaciones interceptToolCall y evaluateState', () => {
-      const node = new Vaelis();
+      const node = new SystemOne();
       const opProp = node.description.properties.find((p) => p.name === 'operation');
       assert.ok(opProp);
       const opValues = opProp.options.map((o) => o.value);
@@ -46,9 +52,9 @@ describe('Vaelis Gateway n8n Community Package', () => {
       assert.ok(opValues.includes('evaluateState'));
     });
 
-    it('debe validar la estructura de VaelisApi credentials con Universal LLM Fallback', () => {
-      const creds = new VaelisApi();
-      assert.strictEqual(creds.name, 'vaelisApi');
+    it('debe validar la estructura de SystemOneApi credentials con Universal LLM Fallback', () => {
+      const creds = new SystemOneApi();
+      assert.strictEqual(creds.name, 'systemOneApi');
       const propNames = creds.properties.map((p) => p.name);
       assert.ok(propNames.includes('provider'));
       assert.ok(propNames.includes('apiKey'));
@@ -59,6 +65,10 @@ describe('Vaelis Gateway n8n Community Package', () => {
       assert.ok(propNames.includes('fallbackApiKey'));
       assert.ok(propNames.includes('fallbackModel'));
       assert.ok(propNames.includes('fallbackBaseUrl'));
+
+      // Verificar alias VaelisApi
+      const vaelisCreds = new VaelisApi();
+      assert.strictEqual(vaelisCreds.name, 'systemOneApi');
     });
   });
 
@@ -239,7 +249,6 @@ describe('Vaelis Gateway n8n Community Package', () => {
 
   describe('Operación evaluateState', () => {
     it('debe transformar reglas estructuradas y enrutar correctamente', async () => {
-      const { executeEvaluateState } = require('../dist/nodes/Vaelis/actions/evaluateState.operation');
       const gateway = getVaelisGateway({ provider: 'typesafe' });
 
       const mockExecuteFunctions = {
@@ -279,7 +288,6 @@ describe('Vaelis Gateway n8n Community Package', () => {
     });
 
     it('debe procesar modo questionsJson correctamente', async () => {
-      const { executeEvaluateState } = require('../dist/nodes/Vaelis/actions/evaluateState.operation');
       const gateway = getVaelisGateway({ provider: 'typesafe' });
 
       const mockExecuteFunctions = {
@@ -316,9 +324,9 @@ describe('Vaelis Gateway n8n Community Package', () => {
     });
   });
 
-  describe('Ejecución Integral del Nodo Vaelis (execute router)', () => {
+  describe('Ejecución Integral del Nodo SystemOne (execute router)', () => {
     it('debe distribuir múltiples ítems en los 3 arreglos de salida según sus veredictos', async () => {
-      const node = new Vaelis();
+      const node = new SystemOne();
 
       const items = [
         { json: { cmd: 'rm -rf /' } },
@@ -348,7 +356,7 @@ describe('Vaelis Gateway n8n Community Package', () => {
           return false;
         },
         getNode() {
-          return { name: 'Vaelis Gateway' };
+          return { name: 'System 1 Gateway' };
         },
       };
 

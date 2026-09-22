@@ -1,14 +1,16 @@
 {
-  "name": "n8n-nodes-vaelis",
+  "name": "n8n-nodes-systemone",
   "version": "0.2.0",
-  "description": "The enterprise Jev & System 1 Gateway for n8n: sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and Universal LLM fallback powered by Vaelis.",
+  "description": "The enterprise System 1 Gateway for TypeSafe Jev in n8n: sub-80ms calibrated classification, 3-tier physical routing, AI agent guardrails, and Universal LLM fallback powered discretely by Vaelis.",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
+    "systemone",
+    "system1",
+    "system-one",
     "jev",
     "typesafe",
     "typesafe-ai",
-    "system1",
     "classification",
     "routing",
     "guardrails",
@@ -28,11 +30,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CubicMaldo/n8n-nodes-vaelis.git"
+    "url": "https://github.com/CubicMaldo/n8n-nodes-systemone.git"
   },
-  "homepage": "https://github.com/CubicMaldo/n8n-nodes-vaelis#readme",
+  "homepage": "https://github.com/CubicMaldo/n8n-nodes-systemone#readme",
   "bugs": {
-    "url": "https://github.com/CubicMaldo/n8n-nodes-vaelis/issues"
+    "url": "https://github.com/CubicMaldo/n8n-nodes-systemone/issues"
   },
   "main": "dist/index.js",
   "scripts": {
@@ -48,10 +50,11 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
+      "dist/credentials/SystemOneApi.credentials.js",
       "dist/credentials/VaelisApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/Vaelis/Vaelis.node.js"
+      "dist/nodes/SystemOne/SystemOne.node.js"
     ]
   },
   "dependencies": {

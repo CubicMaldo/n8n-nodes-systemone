@@ -43,14 +43,14 @@
         }
       },
       "id": "2",
-      "name": "Jev 3-Tier Router",
-      "type": "n8n-nodes-vaelis.vaelis",
+      "name": "System 1 3-Tier Router",
+      "type": "n8n-nodes-systemone.systemOne",
       "typeVersion": 1,
       "position": [480, 300],
       "credentials": {
-        "vaelisApi": {
-          "id": "vaelis_creds",
-          "name": "TypeSafe Jev API"
+        "systemOneApi": {
+          "id": "systemone_creds",
+          "name": "TypeSafe Jev & System 1 API"
         }
       }
     },
@@ -90,14 +90,14 @@
       "main": [
         [
           {
-            "node": "Jev 3-Tier Router",
+            "node": "System 1 3-Tier Router",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Jev 3-Tier Router": {
+    "System 1 3-Tier Router": {
       "main": [
         [
           {

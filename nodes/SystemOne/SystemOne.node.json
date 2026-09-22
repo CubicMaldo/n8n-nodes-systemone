@@ -1,5 +1,5 @@
 {
-  "node": "n8n-nodes-vaelis.vaelis",
+  "node": "n8n-nodes-systemone.systemOne",
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
   "categories": [
@@ -10,9 +10,8 @@
   "resources": {
     "primaryDocumentation": [
       {
-        "url": "https://github.com/CubicMaldo/vaelis"
+        "url": "https://github.com/CubicMaldo/n8n-nodes-systemone"
       }
     ]
   }
 }
-
