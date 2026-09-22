@@ -15,10 +15,28 @@
 ---
 
 ## What is TypeSafe AI / Jev?
+## What is TypeSafe AI and Jev?
 
 [**TypeSafe AI (formerly Jev)**](https://typesafe.ai) is a specialized third-party cloud service designed for extremely fast, structured JSON inference and classification. Unlike standard LLMs which generate conversational text, TypeSafe AI is optimized purely to return deterministic schemas and categorical choices, making it the ideal "System 1" brain for programmatic routing. 
+[**TypeSafe AI**](https://typesafe.ai) is an AI infrastructure company that introduced **Jev**, the industry's first dedicated System 1 foundation model (announced in September 2026, backed by a $40M round led by DCVC). 
 
 This node acts as a robust gateway to TypeSafe AI and other models, adding physical n8n routing, static guardrails, and fallback logic.
+Unlike traditional generative LLMs (GPT-4o, Claude, Gemini) designed for open-ended conversation and reasoning (System 2), Jev is specifically architected for sub-100ms structured inference, calibrated probabilities, and deterministic schema outputs.
+
+### Early Access & Fallback Strategy
+
+TypeSafe AI's Jev Cloud is currently in **Early Access (Waitlist)**. Because production workflows cannot wait on access approvals or single-provider availability, `n8n-nodes-systemone` was purposefully engineered with a dual-redundancy architecture:
+
+1. **Deterministic Offline Heuristics**: Allows zero-token, zero-latency execution directly on your n8n host without network dependencies.
+2. **Universal LLM Fallback**: If you do not yet have a Jev API key, or if your primary API endpoint encounters rate limits (HTTP 429) or regional outages, the node automatically routes requests to standard providers (Groq, OpenAI, Google Gemini, Anthropic, DeepSeek, or local Ollama).
+
+This ensures you can design, test, and run resilient System 1 workflows in production today, and seamlessly switch to Jev Cloud once your access is active.
+
+---
+
+## Project Status & Disclaimer
+
+This package is an **independent, open-source community integration** created by [@CubicMaldo](https://github.com/CubicMaldo). It is not affiliated with, endorsed by, or sponsored by TypeSafe AI Inc. All product names, logos, and brands are property of their respective owners.
 
 ---
 
@@ -35,6 +53,7 @@ Standard LLM nodes (GPT-4o, Claude 3.5 Sonnet, Gemini Pro) are slow (1,500 - 4,0
 ## Comparison with basic implementations
 
 While basic community nodes (such as the standard `n8n-nodes-jev`, compared against v1.2.x, Sept 2026) act as single-output HTTP wrappers around the API, `n8n-nodes-systemone` is an **architected safety gateway** built for production autonomy:
+While basic community nodes (such as `n8n-nodes-jev`, compared against v1.2.x, Sept 2026) act as single-output HTTP wrappers around the API, `n8n-nodes-systemone` is an **architected safety gateway** built for production autonomy:
 
 | Capability | `n8n-nodes-jev` (v1.2.x) | `n8n-nodes-systemone` (System 1 Gateway) |
 | :--- | :---: | :---: |
@@ -74,14 +93,25 @@ When set to **"Deterministic Heuristics"**, the engine avoids network calls enti
 ---
 
 ## Real-World Impact (Before/After)
+## Pricing Model & Economics
 
 In a recent internal test project for **Automated Ticket Triage** (10,000 inbound requests/day):
+The drastic cost reduction delivered by this gateway stems from two concrete mechanics:
+
+1. **Zero-Token Local Execution**: Items routed with high confidence ($\ge 0.90$) via the offline heuristic engine consume **0 API tokens ($0.00)**.
+2. **TypeSafe AI Jev Pricing**: For items routed to Jev Cloud, TypeSafe AI charges **$0.04 per 1M input tokens** with **free outputs** (no generation charge for structured classifications, according to TypeSafe AI's published pricing). This compares to $2.50–$15.00 per 1M tokens on standard LLM providers.
+
+### Real-World Impact (Before/After)
+
+In an internal benchmark of **Automated Ticket Triage** (10,000 inbound requests/day):
 
 | Metric | Before (Pure GPT-4o routing) | After (System 1 Gateway) |
 | :--- | :--- | :--- |
 | **Average Latency** | ~2,100 ms | **~115 ms** (85% handled via Fast-Path) |
 | **Token Cost (Monthly)**| ~$450.00 | **~$35.00** (Only ambiguous tickets hit GPT-4o) |
 | **P99 Security Blocking**| Required heavy pre-prompts | **Sub-1ms static block** (0 API cost for spam/attacks) |
+| **Token Cost (Monthly)**| ~$450.00 | **~$35.00** (Only ambiguous tickets hit GPT-4o; rest hit Jev / local heuristics) |
+| **P99 Security Blocking**| Required heavy pre-prompts | **Sub-1ms static block** ($0.00 cost for spam/attacks) |
 
 ---
 
@@ -177,3 +207,4 @@ We welcome contributions! Please see our [Issues page](https://github.com/CubicM
 ## License
 
 [Apache-2.0](LICENSE) © [CubicMaldo](https://github.com/CubicMaldo)
+
