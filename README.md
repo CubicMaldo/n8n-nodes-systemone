@@ -204,6 +204,22 @@ We welcome contributions! Please see our [Issues page](https://github.com/CubicM
 
 ---
 
+## 🗺️ Roadmap & Planned Work
+
+Active engineering roadmap with planned work ahead (>20 hours):
+
+- [ ] **Custom Guardrail Rule Builder**:
+  - [ ] Add dynamic UI properties in n8n for custom regex and AST pattern definitions without code changes.
+  - [ ] Allow loading user-defined security policies from external URLs or JSON schemas.
+- [ ] **Batch & Stream Processing**:
+  - [ ] Support high-throughput batch evaluation mode for bulk ticket triage (1,000+ items per run).
+  - [ ] Implement stream-based evaluation for long-running agent tool-call interception.
+- [ ] **Telemetry & Node Analytics**:
+  - [ ] Node execution metrics exportable to Prometheus and OpenTelemetry formats.
+  - [ ] In-canvas diagnostic badges showing fast-path vs fallback decision ratios and saved latency.
+
+---
+
 ## License
 
 [Apache-2.0](LICENSE) © [CubicMaldo](https://github.com/CubicMaldo)
